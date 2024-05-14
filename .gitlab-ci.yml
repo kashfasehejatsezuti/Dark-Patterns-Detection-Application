@@ -1,0 +1,24 @@
+stages:
+  - build
+
+backend-build:
+  stage: build
+  script:
+    - cd backend-api
+    - npm install
+    - npm run build
+
+frontend-build:
+  stage: build
+  script:
+    - cd frontend
+    - npm install
+    - npm run build
+
+ml-model-build:
+  stage: build
+  script:
+    - cd ml-model-service
+    - python -m venv venv
+    - source venv/bin/activate
+    - pip install -r requirements.txt

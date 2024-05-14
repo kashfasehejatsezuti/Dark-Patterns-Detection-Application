@@ -1,0 +1,15 @@
+# Virtual Environment
+venv/
+
+# IDE files
+.vscode/
+.idea/
+
+.ipynb_checkpoints/
+
+*.joblib
+trained_models/
+.env
+scraped_data/
+
+__pycache__

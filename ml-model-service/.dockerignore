@@ -1,0 +1,4 @@
+venv
+.idea
+model_training/trained_models
+model_training/scraped_data

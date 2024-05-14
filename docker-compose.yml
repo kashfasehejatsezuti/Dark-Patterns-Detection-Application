@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    ports:
+      - '27018:27017'
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - vtenet-network
+
+  backend-api:
+    container_name: backend-server
+    build:
+      context: ./backend-api
+    image: backend-server:latest
+    ports:
+      - '8080:8080'
+    environment:
+      - NODE_ENV=docker
+    depends_on:
+      - mongo
+    networks:
+      - vtenet-network
+
+  selenium-chrome:
+    image: selenium/standalone-chrome:latest
+    container_name: selenium-chrome
+    ports:
+      - '4444:4444'
+    networks:
+      - vtenet-network
+
+  ml-model-service:
+    container_name: ml-model
+    build:
+      context: ./ml-model-service
+    image: ml-model:latest
+    ports:
+      - '5001:5001'
+    networks:
+      - vtenet-network
+    environment:
+      - DOCKER_ENV=true
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    image: frontend:latest
+    ports:
+      - '3000:3000'
+    depends_on:
+      - backend-api
+      - ml-model-service
+    networks:
+      - vtenet-network
+
+networks:
+  vtenet-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
+    driver: local
